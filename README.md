@@ -55,6 +55,8 @@ The current scope is intentionally limited:
 - Focuses on summarization (no additional features such as storage or personalization)
 - Designed as a minimal, end-to-end implementation
 
+The project focuses on a minimal, well-defined implementation rather than a feature-complete solution.
+
 ---
 
 ## Status
