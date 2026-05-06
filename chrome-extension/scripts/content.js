@@ -34,40 +34,43 @@
     button.style.backgroundColor = "#0056b3";
   });
 
-  button.addEventListener("mouseout", () => {
-    button.style.transform = "scale(1)";
-    button.style.backgroundColor = "#007bff";
-  });
-
-  // --- Click handler ---
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
     try {
-      // --- 1. Find main article container ---
+      // --- 1. Extract article ---
       const article = document.querySelector("article");
 
-      if (!article) {
-        console.error("No <article> element found");
-        return;
-      }
+      const title = article.querySelector("h1")?.innerText || "";
 
-      // --- 2. Extract headline ---
-      const titleElement = article.querySelector("h1");
-      const title = titleElement ? titleElement.innerText.trim() : "";
-
-      // --- 3. Extract all paragraphs ---
-      const paragraphElements = article.querySelectorAll("p");
-
-      const paragraphs = Array.from(paragraphElements)
+      const paragraphs = Array.from(article.querySelectorAll("p"))
         .map((p) => p.innerText.trim())
-        .filter((text) => text.length > 0);
+        .filter((t) => t.length > 40);
 
-      // --- 4. Combine into one clean text ---
       const articleText = [title, ...paragraphs].join("\n\n");
 
-      console.log("✅ Extracted article:");
-      console.log(articleText);
+      console.log("📤 Sending to backend...");
+
+      // --- 2. Call FastAPI backend ---
+      const response = await fetch("http://127.0.0.1:8002/summarize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: articleText,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // --- 3. Handle response ---
+      console.log("✅ Summary:");
+      console.log(data.summary);
     } catch (err) {
-      console.error("Extraction error:", err);
+      console.error("❌ Error:", err);
     }
   });
 
