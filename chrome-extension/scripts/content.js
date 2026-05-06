@@ -40,23 +40,35 @@
   });
 
   // --- Click handler ---
-  button.addEventListener("click", async () => {
-    console.log("FAB clicked 🚀");
+  button.addEventListener("click", () => {
+    try {
+      // --- 1. Find main article container ---
+      const article = document.querySelector("article");
 
-    // TEMP: Replace later with your backend call
-    alert("Summarizing article...");
+      if (!article) {
+        console.error("No <article> element found");
+        return;
+      }
 
-    // Example (future backend call):
-    // const articleText = document.body.innerText;
-    // const res = await fetch("http://localhost:8000/summarize", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({ text: articleText })
-    // });
-    // const data = await res.json();
-    // console.log(data.summary);
+      // --- 2. Extract headline ---
+      const titleElement = article.querySelector("h1");
+      const title = titleElement ? titleElement.innerText.trim() : "";
+
+      // --- 3. Extract all paragraphs ---
+      const paragraphElements = article.querySelectorAll("p");
+
+      const paragraphs = Array.from(paragraphElements)
+        .map((p) => p.innerText.trim())
+        .filter((text) => text.length > 0);
+
+      // --- 4. Combine into one clean text ---
+      const articleText = [title, ...paragraphs].join("\n\n");
+
+      console.log("✅ Extracted article:");
+      console.log(articleText);
+    } catch (err) {
+      console.error("Extraction error:", err);
+    }
   });
 
   // --- Append to DOM ---
