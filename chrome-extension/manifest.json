@@ -1,0 +1,14 @@
+{
+  "name": "drdk summarizer",
+  "description": "AI-powered extension to summarize news articles from dr.dk",
+  "version": "1.0",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://www.dr.dk/*"
+      ]
+    }
+  ]
+}
