@@ -17,6 +17,19 @@ With one click, this extension:
 
 ---
 
+## 🎥 Demo
+
+See how drdk-ai-summarizer works in practice:
+
+![Demo of drdk-ai-summarizer](./docs/demo.gif)
+
+1. Open a DR.dk article  
+2. Click the ✨ button  
+3. Instantly get a 3-point AI summary in a modal  
+
+---
+
+
 ## 🧠 Example
 
 Click the floating button on a DR.dk article:
