@@ -1,120 +1,221 @@
 # drdk-ai-summarizer
 
-A Chrome extension that summarizes DR.dk news articles using AI.
+A Chrome extension that summarizes DR.dk news articles using a local AI model (Ollama).
 
 ---
 
-## Overview
+## ✨ What it does
 
-drdk-ai-summarizer is a small, focused tool designed to extract and summarize news articles from [https://www.dr.dk/](https://www.dr.dk/).  
-The extension enables users to quickly understand the key points of an article without reading the full content.
+With one click, this extension:
 
----
+1. Extracts the article content from a DR.dk page
+2. Sends it to a local AI backend
+3. Returns a concise 3-point summary
+4. Displays it in a clean modal UI
 
-## Features
-
-✅ **Implemented**
-
-- Injects a floating action button (FAB) into DR.dk article pages
-- Extracts article title and paragraph content directly from the DOM
-- Cleans and structures the extracted text for AI processing
-
-🚧 **Planned**
-
-- Send extracted article content to a FastAPI backend
-- Generate summaries using an AI model (via Ollama)
-- Display summaries in a user-friendly UI (modal or side panel)
+👉 The goal is simple: **understand articles in seconds**
 
 ---
 
-## Architecture
+## 🧠 Example
 
-The project consists of three main components:
+Click the floating button on a DR.dk article:
 
-### **Chrome Extension**
+```
 
-- Injects UI (floating action button) into DR.dk pages
-- Handles user interaction
-- Extracts article content from the page DOM
+✨ → 🧠 AI Resumé
 
-### **Backend (FastAPI)**
+- Punkt 1
+- Punkt 2
+- Punkt 3
 
-- Provides an API for processing article text
-- Handles communication with the AI model
-
-### **Ollama**
-
-- Used to access AI models for summarization
-- Runs locally or via cloud
+```
 
 ---
 
-## How it works (current flow)
+## ✅ Features
 
-1. A user visits a DR.dk article
-2. The Chrome extension injects a floating button into the page
-3. The user clicks the button
-4. The extension extracts:
-   - Article title (`<h1>`)
-   - Article paragraphs (`<p>`)
-5. The extracted content is logged and prepared for AI processing
+- Floating action button injected into DR.dk articles
+- Clean extraction of article content (title + paragraphs)
+- AI-powered summarization (via Ollama)
+- Modal UI with formatted bullet points
+- Runs fully locally (no external API required)
 
 ---
 
-## How it will work (next steps)
+## 🏗️ Architecture
 
-1. Extract article content (✅ done)
-2. Send content to FastAPI backend
-3. Generate summary using Ollama
-4. Return summary to extension
-5. Display summary in UI (modal or side panel)
+```
 
----
+Chrome Extension
+↓
+FastAPI backend
+↓
+Ollama (local LLM)
 
-## Project scope
+```
 
-The current scope is intentionally limited:
+### Chrome Extension
 
-- Supports only DR.dk articles
-- Focuses on summarization
-- No persistence, accounts, or personalization
-- Designed as a minimal, end-to-end implementation
+- Injects UI (FAB)
+- Extracts article text
+- Calls backend
+- Displays summary in modal
 
----
+### FastAPI Backend
 
-## Status
+- Receives article text
+- Calls Ollama API
+- Returns summary
 
-The project is in early development.
+### Ollama
 
-✅ Completed:
-
-- Floating action button injected into pages
-- Article extraction (title + paragraphs)
-
-🚧 In progress:
-
-- Backend integration (FastAPI)
-- AI summarization (Ollama)
-
-🔜 Planned:
-
-- UI for displaying summaries
-- Improved article extraction robustness
+- Runs locally
+- Generates summaries using LLM
 
 ---
 
-## Running the project
+## 🚀 Getting Started
 
-Setup instructions will be added as development progresses.
+### 1. Clone repository
 
-Expected setup:
-
-- Run the FastAPI backend
-- Ensure Ollama is available (local or cloud)
-- Load the extension in Chrome (developer mode)
+```bash
+git clone <your-repo-url>
+cd drdk-ai-summarizer
+```
 
 ---
 
-## License
+### 2. Start Ollama
+
+Install Ollama: https://ollama.com/
+
+Run:
+
+```bash
+ollama serve
+```
+
+Pull a model (example):
+
+```bash
+ollama pull llama3
+```
+
+---
+
+### 3. Start backend
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8002
+```
+
+---
+
+### 4. Load Chrome extension
+
+1.  Go to: `chrome://extensions`
+2.  Enable **Developer mode**
+3.  Click **Load unpacked**
+4.  Select:
+
+<!---->
+
+    chrome-extension/
+
+---
+
+### 5. Use it
+
+1.  Open any DR.dk news article
+2.  Click the ✨ button
+3.  Get an instant AI summary
+
+---
+
+## ⚙️ Configuration
+
+### Backend endpoint
+
+In `content.js`:
+
+```js
+fetch("http://127.0.0.1:8002/summarize", ...)
+```
+
+---
+
+### Prompt (Danish summarization)
+
+The backend uses a Danish prompt similar to:
+
+```text
+Du er en professionel nyhedsanalytiker.
+
+Opsummer artiklen i præcis 3 korte punkter.
+Fokuser på fakta, betydning og konsekvenser.
+```
+
+---
+
+### Supported models
+
+Works with any Ollama model, for example:
+
+- `llama3`
+- `mistral`
+- `phi3`
+- `gpt-oss:120b-cloud` (recommended for Danish)
+
+---
+
+## 📁 Project structure
+
+    .
+    ├── chrome-extension/
+    │   ├── manifest.json
+    │   └── scripts/
+    │       └── content.js
+    └── backend/
+        ├── main.py
+        └── app/
+            ├── routes/
+            └── services/
+
+---
+
+## ⚠️ Limitations
+
+- Only supports DR.dk articles (DOM structure specific)
+- Requires local Ollama instance
+- Large articles may slow down processing
+- No offline caching (yet)
+
+---
+
+## 🔮 Future ideas
+
+- Save summaries / history
+- Support more news sites
+- Improve article extraction robustness
+- Add translation / simplification modes
+- Keyboard shortcuts
+
+---
+
+## 🧑‍💻 Why this project exists
+
+This project explores:
+
+- Chrome extension development
+- FastAPI backend design
+- Local LLM integration (Ollama)
+- Practical AI tools for everyday use
+
+---
+
+## 📄 License
 
 MIT
